@@ -4,10 +4,17 @@ import os
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def display_header():
+def display_header(chapter_selection):
     print("=" * 80)
     print("SYSC 4810: Introduction to Network and Software Security")
-    print("Chapter 1 Quiz - Fall 2024")
+    if chapter_selection == "1":
+        print("Chapter 1 Quiz - Fall 2024")
+    elif chapter_selection == "2":
+        print("Chapter 2 Quiz - Fall 2024")
+    elif chapter_selection == "3":
+        print("Chapter 3 Quiz - Fall 2024")
+    else:
+        print("Chapters 1 & 2 & 3 Combined Quiz - Fall 2024")
     print("=" * 80)
     print("Time Limit: 30 Minutes")
     print("Total Points: 100")
@@ -36,21 +43,8 @@ def show_feedback(user_answer, correct_answer, is_correct, points_earned, total_
     print("-" * 80)
     input("\nPress ENTER to continue...")
 
-def run_quiz():
-    clear_screen()
-    display_header()
-    
-    input("Press ENTER to begin the quiz...")
-    start_time = time.time()
-    time_limit = 30 * 60  # 30 minutes in seconds
-    
-    # Store user answers
-    user_answers = {}
-    score = 0
-    total_points = 100
-    
-    # Quiz questions with answers, points, and explanations
-    questions = {
+def get_chapter_1_questions():
+    return {
         # SECTION 1: MULTIPLE CHOICE (2 points each)
         "section1": {
             "title": "Section 1: Multiple Choice (2 points each)",
@@ -584,6 +578,1087 @@ def run_quiz():
             ]
         }
     }
+def get_chapter_2_questions():
+    """Returns Chapter 2 questions"""
+    return {
+        # SECTION 1: MULTIPLE CHOICE (2 points each)
+        "section1": {
+            "title": "Section 1: Multiple Choice (2 points each)",
+            "questions": [
+                {
+                    "num": 1,
+                    "question": "In symmetric encryption, the encryption key k and decryption key k' are:",
+                    "options": {
+                        "A": "Different keys generated independently",
+                        "B": "The same key (k = k')",
+                        "C": "Public and private key pairs",
+                        "D": "One is derived from a hash of the other"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Symmetric encryption uses the same key for both encryption and decryption (k = k'), also called secret-key encryption."
+                },
+                {
+                    "num": 2,
+                    "question": "Which of the following is an example of a symmetric encryption algorithm?",
+                    "options": {
+                        "A": "RSA",
+                        "B": "AES",
+                        "C": "Diffie-Hellman",
+                        "D": "Elliptic Curve Cryptography"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "AES (Advanced Encryption Standard) is a symmetric encryption algorithm. RSA and ECC are asymmetric, and Diffie-Hellman is for key exchange."
+                },
+                {
+                    "num": 3,
+                    "question": "For a key of size n bits, how many expected trials are needed for a brute-force attack?",
+                    "options": {
+                        "A": "n",
+                        "B": "2^n",
+                        "C": "2^(n-1)",
+                        "D": "n^2"
+                    },
+                    "answer": "C",
+                    "points": 2,
+                    "explanation": "On average, you'd need to try half the key space, which is 2^(n-1) trials for an n-bit key."
+                },
+                {
+                    "num": 4,
+                    "question": "Which attack model involves the attacker having access to both plaintext and corresponding ciphertext?",
+                    "options": {
+                        "A": "Ciphertext-only attack",
+                        "B": "Known-plaintext attack",
+                        "C": "Chosen-plaintext attack",
+                        "D": "Chosen-ciphertext attack"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Known-plaintext attack: attacker has CT-PT pairs and tries to recover unknown PT or key from another CT."
+                },
+                {
+                    "num": 5,
+                    "question": "The Vernam cipher (one-time pad) is:",
+                    "options": {
+                        "A": "Computationally secure",
+                        "B": "Information-theoretically secure",
+                        "C": "Vulnerable to known-plaintext attacks",
+                        "D": "Based on RSA encryption"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "One-time pads are information-theoretically secure (unbreakable even with unlimited computing power) when used correctly."
+                },
+                {
+                    "num": 6,
+                    "question": "What is the main practical limitation of one-time pads?",
+                    "options": {
+                        "A": "They are too slow",
+                        "B": "Key distribution and key length requirements",
+                        "C": "They only work with small messages",
+                        "D": "They are vulnerable to frequency analysis"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "One-time pads require keys as long as the message and secure key distribution, making them impractical for most uses."
+                },
+                {
+                    "num": 7,
+                    "question": "Electronic Code-Book (ECB) mode is considered insecure because:",
+                    "options": {
+                        "A": "It's too slow for modern applications",
+                        "B": "Identical plaintext blocks produce identical ciphertext blocks",
+                        "C": "It requires too much memory",
+                        "D": "It can only encrypt small messages"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "ECB encrypts each block independently with the same key, so identical plaintext blocks produce identical ciphertext, revealing patterns."
+                },
+                {
+                    "num": 8,
+                    "question": "In CBC (Cipher-Block Chaining) mode, what is used to ensure different ciphertext for identical plaintext?",
+                    "options": {
+                        "A": "A counter value",
+                        "B": "An initialization vector (IV)",
+                        "C": "A different key for each block",
+                        "D": "A hash function"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "CBC uses a random initialization vector (IV) and chains blocks together by XORing each plaintext block with the previous ciphertext block."
+                },
+                {
+                    "num": 9,
+                    "question": "Which cipher mode allows for parallel encryption and decryption?",
+                    "options": {
+                        "A": "CBC",
+                        "B": "CTR",
+                        "C": "Both A and B",
+                        "D": "Neither A nor B"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "CTR (Counter) mode allows parallelization of both encryption and decryption. CBC only allows parallel decryption."
+                },
+                {
+                    "num": 10,
+                    "question": "In asymmetric encryption, to send a confidential message to Bob, Alice should encrypt with:",
+                    "options": {
+                        "A": "Alice's private key",
+                        "B": "Alice's public key",
+                        "C": "Bob's private key",
+                        "D": "Bob's public key"
+                    },
+                    "answer": "D",
+                    "points": 2,
+                    "explanation": "For confidentiality: encrypt with recipient's PUBLIC key, only recipient can decrypt with their PRIVATE key."
+                },
+                {
+                    "num": 11,
+                    "question": "For n parties to communicate securely using symmetric encryption, how many keys are needed?",
+                    "options": {
+                        "A": "n",
+                        "B": "2n",
+                        "C": "n(n-1)/2",
+                        "D": "n^2"
+                    },
+                    "answer": "C",
+                    "points": 2,
+                    "explanation": "Each pair needs a unique shared key, requiring n(n-1)/2 keys. Asymmetric encryption only needs 2n keys (public/private pair per person)."
+                },
+                {
+                    "num": 12,
+                    "question": "What is the primary advantage of hybrid encryption?",
+                    "options": {
+                        "A": "It's more secure than pure asymmetric encryption",
+                        "B": "It combines the speed of symmetric encryption with the key distribution benefits of asymmetric",
+                        "C": "It uses shorter keys",
+                        "D": "It doesn't require any key management"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Hybrid encryption uses asymmetric encryption to securely exchange a symmetric key, then uses faster symmetric encryption for the actual data."
+                },
+                {
+                    "num": 13,
+                    "question": "A digital signature is created by:",
+                    "options": {
+                        "A": "Encrypting with the sender's public key",
+                        "B": "Encrypting with the sender's private key",
+                        "C": "Encrypting with the recipient's public key",
+                        "D": "Hashing the message"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Digital signatures: sign with sender's PRIVATE key (signing key), verify with sender's PUBLIC key (verification key)."
+                },
+                {
+                    "num": 14,
+                    "question": "Which property is NOT provided by digital signatures?",
+                    "options": {
+                        "A": "Data origin authentication",
+                        "B": "Data integrity",
+                        "C": "Confidentiality",
+                        "D": "Non-repudiation"
+                    },
+                    "answer": "C",
+                    "points": 2,
+                    "explanation": "Digital signatures provide authentication, integrity, and non-repudiation, but NOT confidentiality (anyone can verify a signature)."
+                },
+                {
+                    "num": 15,
+                    "question": "Cryptographic hash functions produce:",
+                    "options": {
+                        "A": "Variable-length output",
+                        "B": "Fixed-length output",
+                        "C": "Encrypted data",
+                        "D": "Reversible transformations"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Cryptographic hash functions take arbitrary-length input and produce fixed-length output (hash value/message digest)."
+                },
+                {
+                    "num": 16,
+                    "question": "Preimage resistance (H1) means:",
+                    "options": {
+                        "A": "Given h, it's infeasible to find any m where H(m) = h",
+                        "B": "Given m1, it's infeasible to find m2 where H(m1) = H(m2)",
+                        "C": "It's infeasible to find any collision",
+                        "D": "The hash is irreversible"
+                    },
+                    "answer": "A",
+                    "points": 2,
+                    "explanation": "Preimage resistance (one-way property): given hash value h, infeasible to find any message m that produces that hash."
+                },
+                {
+                    "num": 17,
+                    "question": "Collision resistance (H3) means:",
+                    "options": {
+                        "A": "Given m, you can't find H(m)",
+                        "B": "Given m1, you can't find different m2 with same hash",
+                        "C": "You can't find ANY two different messages with the same hash",
+                        "D": "Hashes are unique"
+                    },
+                    "answer": "C",
+                    "points": 2,
+                    "explanation": "Collision resistance: infeasible to find ANY pair of distinct inputs m1, m2 such that H(m1) = H(m2)."
+                },
+                {
+                    "num": 18,
+                    "question": "Which hash function is currently recommended for security-critical applications?",
+                    "options": {
+                        "A": "MD5",
+                        "B": "SHA-1",
+                        "C": "SHA-256 or SHA-3",
+                        "D": "All of the above"
+                    },
+                    "answer": "C",
+                    "points": 2,
+                    "explanation": "SHA-256 (SHA-2 family) and SHA-3 are currently recommended. MD5 and SHA-1 are deprecated due to vulnerabilities."
+                },
+                {
+                    "num": 19,
+                    "question": "Message Authentication Codes (MAC) require:",
+                    "options": {
+                        "A": "Only the message as input",
+                        "B": "Message and a secret key",
+                        "C": "Public and private key pairs",
+                        "D": "A hash function only"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "MACs are computed using both the message and a secret key shared between sender and receiver."
+                },
+                {
+                    "num": 20,
+                    "question": "Compared to digital signatures, MACs are:",
+                    "options": {
+                        "A": "Slower but more secure",
+                        "B": "Faster but don't provide non-repudiation",
+                        "C": "Less secure overall",
+                        "D": "Require public key infrastructure"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "MACs use symmetric crypto (faster) but can't provide non-repudiation since the key is shared. Best for continuous data streams."
+                }
+            ]
+        },
+        
+        # SECTION 2: TRUE/FALSE (1 point each)
+        "section2": {
+            "title": "Section 2: True/False (1 point each)",
+            "questions": [
+                {
+                    "num": 21,
+                    "question": "Encryption algorithms are typically kept secret.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - Encryption algorithms are typically non-secrets (public). Security relies on the key, not algorithm secrecy."
+                },
+                {
+                    "num": 22,
+                    "question": "Computational security assumes attackers have unlimited computing resources.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - Computational security assumes attackers have FIXED computational resources, making brute-force infeasible."
+                },
+                {
+                    "num": 23,
+                    "question": "The Vernam cipher (one-time pad) is perfectly secret when used correctly.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - One-time pads are perfectly secret: observing ciphertext gives no information about plaintext (except length)."
+                },
+                {
+                    "num": 24,
+                    "question": "In ECB mode, errors in one ciphertext block affect multiple plaintext blocks during decryption.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - In ECB, errors only affect the corresponding block. Errors don't propagate."
+                },
+                {
+                    "num": 25,
+                    "question": "CBC mode encryption can be parallelized.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - CBC encryption cannot be parallelized (depends on previous block). Decryption CAN be parallelized."
+                },
+                {
+                    "num": 26,
+                    "question": "CTR mode allows both parallel encryption and parallel decryption.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - CTR mode allows parallelization of both encryption and decryption since blocks are independent."
+                },
+                {
+                    "num": 27,
+                    "question": "Asymmetric encryption is generally faster than symmetric encryption.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - Asymmetric encryption is much slower than symmetric, which is why hybrid encryption is commonly used."
+                },
+                {
+                    "num": 28,
+                    "question": "Digital signatures provide confidentiality for the message content.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - Digital signatures provide authentication, integrity, and non-repudiation, but NOT confidentiality."
+                },
+                {
+                    "num": 29,
+                    "question": "Collision resistance (H3) implies second-preimage resistance (H2).",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - If you can't find ANY collision, you certainly can't find a collision for a specific given message."
+                },
+                {
+                    "num": 30,
+                    "question": "MD5 is currently recommended for security-critical applications.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - MD5 is widely deprecated due to collision vulnerabilities. Use SHA-256 or SHA-3 instead."
+                },
+                {
+                    "num": 31,
+                    "question": "Cryptographic hash functions are reversible transformations.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - Hash functions are one-way (preimage resistant). You cannot reverse a hash to get the original message."
+                },
+                {
+                    "num": 32,
+                    "question": "For a good hash function, changing a single input bit should change about 50% of output bits.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - Good hash functions exhibit avalanche effect: small input changes cause unpredictable, large output changes."
+                },
+                {
+                    "num": 33,
+                    "question": "MACs provide non-repudiation.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - MACs don't provide non-repudiation because the key is shared; either party could have created the MAC."
+                },
+                {
+                    "num": 34,
+                    "question": "MACs on their own ensure message freshness and prevent replay attacks.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - MACs verify integrity and authentication but don't prevent replay. Additional mechanisms (nonces, timestamps) are needed."
+                },
+                {
+                    "num": 35,
+                    "question": "In the RSA algorithm, the public key consists of {e, n}.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - RSA public key is PU = {e, n}, private key is PR = {d, n}, where n = pq (product of two primes)."
+                },
+                {
+                    "num": 36,
+                    "question": "Hybrid encryption uses asymmetric encryption for the entire message.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - Hybrid uses asymmetric encryption only for the symmetric key, then symmetric encryption for the message payload."
+                },
+                {
+                    "num": 37,
+                    "question": "A chosen-plaintext attack is more powerful than a known-plaintext attack.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - Chosen-plaintext allows attacker to choose specific plaintexts and see resulting ciphertexts, providing more control."
+                },
+                {
+                    "num": 38,
+                    "question": "AES is a block cipher with a block length of 128 bits.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - AES has a fixed block length of 128 bits and supports key lengths of 128, 192, or 256 bits."
+                },
+                {
+                    "num": 39,
+                    "question": "DES has a key length of 128 bits.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - DES has a key length of only 56 bits (too short by modern standards), which is why it was replaced by AES."
+                },
+                {
+                    "num": 40,
+                    "question": "Birthday paradox makes finding collisions easier than finding preimages.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - Due to birthday paradox, collision attacks require roughly 2^(n/2) operations vs 2^n for preimage attacks on n-bit hashes."
+                }
+            ]
+        },
+        
+        # SECTION 3: SHORT ANSWER (2 points each)
+        "section3": {
+            "title": "Section 3: Short Answer (2 points each)",
+            "questions": [
+                {
+                    "num": 41,
+                    "question": "Name TWO types of attack models where the adversary is ACTIVE (separate with comma):",
+                    "answer": ["chosen-plaintext", "chosen-ciphertext", "chosen plaintext", "chosen ciphertext"],
+                    "points": 2,
+                    "type": "multi_text",
+                    "explanation": "Active adversary attack models: Chosen-plaintext attack and Chosen-ciphertext attack. (Passive: Ciphertext-only, Known-plaintext)"
+                },
+                {
+                    "num": 42,
+                    "question": "What does AES stand for?",
+                    "answer": ["advanced encryption standard", "aes"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "AES = Advanced Encryption Standard, the current standard symmetric encryption algorithm (Rijndael, 1998)."
+                },
+                {
+                    "num": 43,
+                    "question": "In CTR mode, what must be ensured about the IV + counter value to maintain security?",
+                    "answer": ["never repeat", "never repeats", "unique", "must not repeat", "no repeat"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "In CTR mode, IV + i must NEVER repeat across encryptions with the same key to maintain security."
+                },
+                {
+                    "num": 44,
+                    "question": "What is the formula used in the Vernam cipher (one-time pad)?",
+                    "answer": ["c = m xor k", "m xor k", "c=m⊕k", "xor"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "Vernam cipher uses XOR: c = m ⊕ k (ciphertext = message XOR key), where key length = message length."
+                },
+                {
+                    "num": 45,
+                    "question": "Name ONE cryptographic property that hash functions must satisfy:",
+                    "answer": ["preimage resistance", "one-way", "second-preimage resistance", "collision resistance", "one way"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "Hash functions must satisfy: H1 (preimage/one-way), H2 (second-preimage resistance), H3 (collision resistance)."
+                },
+                {
+                    "num": 46,
+                    "question": "To verify a digital signature, whose public key do you use?",
+                    "answer": ["sender", "signer", "sender's", "signer's"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "Verify signature using sender's/signer's PUBLIC (verification) key. Signature created with sender's PRIVATE (signing) key."
+                },
+                {
+                    "num": 47,
+                    "question": "What type of encryption (symmetric or asymmetric) is used in MACs?",
+                    "answer": ["symmetric", "secret key"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "MACs use symmetric encryption with a shared secret key, making them much faster than digital signatures."
+                },
+                {
+                    "num": 48,
+                    "question": "Why is ECB mode considered insecure?",
+                    "answer": ["identical blocks", "same plaintext", "patterns", "identical plaintext blocks produce identical ciphertext"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "ECB is insecure because identical plaintext blocks produce identical ciphertext blocks, revealing patterns (e.g., ECB penguin)."
+                },
+                {
+                    "num": 49,
+                    "question": "What does IV stand for in cipher modes like CBC?",
+                    "answer": ["initialization vector", "init vector"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "IV = Initialization Vector, a random value used to ensure different ciphertext for identical plaintext in modes like CBC."
+                },
+                {
+                    "num": 50,
+                    "question": "Information-theoretic security means security even against adversaries with _______ computing power:",
+                    "answer": ["unlimited", "infinite", "unbounded", "unbound"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "Information-theoretic security (like one-time pads) is secure even against adversaries with unlimited/unbounded computing power."
+                }
+            ]
+        }
+    }
+
+def get_chapter_3_questions():
+    """Returns Chapter 3 questions (User Authentication - up to slide 33)"""
+    return {
+        # SECTION 1: MULTIPLE CHOICE (2 points each)
+        "section1": {
+            "title": "Section 1: Multiple Choice (2 points each)",
+            "questions": [
+                {
+                    "num": 1,
+                    "question": "Authentication is best described as:",
+                    "options": {
+                        "A": "The process of granting access rights to resources",
+                        "B": "The process of using supporting evidence to corroborate an asserted identity",
+                        "C": "The process of encrypting user credentials",
+                        "D": "The process of establishing identity without an explicit assertion"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Authentication is the process of using supporting evidence (credentials) to corroborate an asserted identity. It's a single test to verify if provided credentials match the stored template."
+                },
+                {
+                    "num": 2,
+                    "question": "Identification (recognition) differs from authentication in that:",
+                    "options": {
+                        "A": "It requires a password",
+                        "B": "It's a one-to-many process without an explicit identity assertion",
+                        "C": "It's faster than authentication",
+                        "D": "It only works with biometrics"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Identification is a one-to-many process (e.g., picking out a criminal in a crowd, matching a fingerprint to its owner) without an explicit identity having been asserted first."
+                },
+                {
+                    "num": 3,
+                    "question": "Which authentication category does a password belong to?",
+                    "options": {
+                        "A": "What you have",
+                        "B": "What you know",
+                        "C": "What you are/do",
+                        "D": "Where you are"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Passwords fall under 'What you know' category of authentication, along with PINs and other memorized secrets."
+                },
+                {
+                    "num": 4,
+                    "question": "Two-factor authentication (2FA) typically requires:",
+                    "options": {
+                        "A": "Two passwords from the same category",
+                        "B": "Methods from two different authentication categories",
+                        "C": "Two biometric methods",
+                        "D": "Two devices"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "2FA typically requires methods from two different categories to provide independent protection (e.g., password + hardware token)."
+                },
+                {
+                    "num": 5,
+                    "question": "When storing passwords, the system should store:",
+                    "options": {
+                        "A": "Cleartext passwords for quick verification",
+                        "B": "Password hashes H(pi)",
+                        "C": "Encrypted passwords using symmetric encryption",
+                        "D": "Passwords in a secure database only"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Systems should store password hashes H(pi) using a publicly known one-way hash function, not cleartext passwords which expose all passwords if the file is stolen."
+                },
+                {
+                    "num": 6,
+                    "question": "A targeted attack is:",
+                    "options": {
+                        "A": "An attack aimed at breaking into any account",
+                        "B": "An attack specifically aimed at pre-identified users",
+                        "C": "Always an online attack",
+                        "D": "Less dangerous than a trawling attack"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "A targeted attack is specifically aimed at pre-identified users (often one), while trawling attacks aim to break into any account by trying many accounts (breadth-first)."
+                },
+                {
+                    "num": 7,
+                    "question": "In a pre-computed dictionary attack, the attacker:",
+                    "options": {
+                        "A": "Tries passwords online against the server",
+                        "B": "Creates a table of (hj, wj) pairs and compares with stolen password hashes",
+                        "C": "Uses social engineering only",
+                        "D": "Bypasses the authentication mechanism entirely"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Pre-computed dictionary attacks involve creating a table T of pairs (hj, wj) where hj = H(wj), then comparing with stolen password file hashes to find matches."
+                },
+                {
+                    "num": 8,
+                    "question": "Password capture attacks include all EXCEPT:",
+                    "options": {
+                        "A": "Shoulder-surfing",
+                        "B": "Keyloggers",
+                        "C": "Brute-force guessing",
+                        "D": "Phishing"
+                    },
+                    "answer": "C",
+                    "points": 2,
+                    "explanation": "Password capture attacks intercept or observe passwords (shoulder-surfing, keyloggers, phishing, pharming). Brute-force guessing is a password-guessing attack, not a capture attack."
+                },
+                {
+                    "num": 9,
+                    "question": "Password composition policies primarily aim to:",
+                    "options": {
+                        "A": "Prevent all types of attacks",
+                        "B": "Provide higher resilience to simple password-guessing attacks",
+                        "C": "Protect against capture attacks",
+                        "D": "Make passwords easier to remember"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Password policies (complexity requirements) only provide higher resilience to simple password-guessing attacks. They don't protect against capture attacks and users often make predictable modifications."
+                },
+                {
+                    "num": 10,
+                    "question": "Online password-guessing attacks are primarily limited by:",
+                    "options": {
+                        "A": "CPU power of the attacker",
+                        "B": "Network bandwidth and rate limiting",
+                        "C": "Password hash strength",
+                        "D": "Operating system security"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Online password-guessing attacks are limited by network bandwidth and can be defended against using rate limiting (throttling), though this can lock out legitimate users."
+                },
+                {
+                    "num": 11,
+                    "question": "The purpose of password salting is to:",
+                    "options": {
+                        "A": "Make passwords taste better",
+                        "B": "Slow down all password attacks equally",
+                        "C": "Make trawling dictionary attacks harder by requiring tables for each salt value",
+                        "D": "Eliminate the need for strong passwords"
+                    },
+                    "answer": "C",
+                    "points": 2,
+                    "explanation": "Password salting stores (ui, si, H(pi,si)) where si is a random salt. This makes trawling attacks harder by a factor of 2^t (requiring tables for each salt), though targeted attacks with known salt aren't slowed."
+                },
+                {
+                    "num": 12,
+                    "question": "Iterated hashing (password stretching) works by:",
+                    "options": {
+                        "A": "Hashing the password multiple times: H^d(pi)",
+                        "B": "Using longer hash functions",
+                        "C": "Adding more salt",
+                        "D": "Storing multiple password hashes"
+                    },
+                    "answer": "A",
+                    "points": 2,
+                    "explanation": "Iterated hashing computes H(…H(H(pi))) = H^d(pi), hashing d times. This slows attacks by factor d (e.g., d=1000), and can be adjusted as computing power increases."
+                },
+                {
+                    "num": 13,
+                    "question": "A pepper (secret salt) differs from regular salt because:",
+                    "options": {
+                        "A": "It uses a different hash function",
+                        "B": "It is not stored and must be guessed during verification",
+                        "C": "It's only used for strong passwords",
+                        "D": "It's stored encrypted"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Pepper is like salt but NOT stored. System stores H(pi,ri), erases ri, then must try all possible r* values during verification until finding a match, slowing down both legitimate verification and attacks."
+                },
+                {
+                    "num": 14,
+                    "question": "User-chosen passwords typically result in:",
+                    "options": {
+                        "A": "Uniform distribution across password space",
+                        "B": "Predictable clustering and highly skewed distribution",
+                        "C": "Maximum security",
+                        "D": "Random distribution"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "User-chosen passwords exhibit predictable clustering and highly skewed distributions. Attackers exploit this by trying more popular (higher probability) passwords first."
+                },
+                {
+                    "num": 15,
+                    "question": "System-assigned random passwords provide:",
+                    "options": {
+                        "A": "Better usability than user-chosen passwords",
+                        "B": "Protection against brute-force at cost of usability",
+                        "C": "Guaranteed security against all attacks",
+                        "D": "Easier memorization"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "System-assigned random passwords create uniform distribution (password space b^n), making brute-force the best attack strategy, but suffer from poor usability (violates P11: User-buy-in)."
+                },
+                {
+                    "num": 16,
+                    "question": "Password denylists are used to:",
+                    "options": {
+                        "A": "Block users from the system",
+                        "B": "Prevent selection of most-popular weak passwords",
+                        "C": "Store forbidden usernames",
+                        "D": "Encrypt passwords"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Denylists contain most-popular passwords from known distributions. Proactive password checking disallows passwords on the denylist during password selection."
+                },
+                {
+                    "num": 17,
+                    "question": "Which defensive measure makes a stolen password hash file less useful for offline attacks?",
+                    "options": {
+                        "A": "Rate limiting",
+                        "B": "MAC on password hashes",
+                        "C": "Account lockout",
+                        "D": "CAPTCHA"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Adding a MAC to password hashes means stolen hash files become useless since attackers can't verify guesses without the MAC key. Rate limiting and lockout defend against online attacks."
+                },
+                {
+                    "num": 18,
+                    "question": "Account recovery using secret questions typically fails because:",
+                    "options": {
+                        "A": "Questions are too complex",
+                        "B": "Answers change over time, are socially discoverable, and recovery occurs long after answers were set",
+                        "C": "They're more secure than passwords",
+                        "D": "Users always remember correct answers"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Secret questions fail because: recovery occurs long after answers were set, answers change over time (favorite movie), answers are vulnerable to social engineering/guessing, and users sometimes intentionally give wrong answers."
+                },
+                {
+                    "num": 19,
+                    "question": "Which is an advantage of passwords over other authentication methods?",
+                    "options": {
+                        "A": "They cannot be shared",
+                        "B": "They're free, simple, already understood, and easy to change",
+                        "C": "They provide perfect security",
+                        "D": "They never need to be reset"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Password advantages: simple/understood, 'free' (no extra hardware), no physical device to carry, quick login, easy to change/recover, well-understood failure modes, no new third party trust needed, easily delegated."
+                },
+                {
+                    "num": 20,
+                    "question": "Biometric authentication is NOT appropriate for:",
+                    "options": {
+                        "A": "Local device unlock",
+                        "B": "Remote authentication over the Internet",
+                        "C": "Physical access control",
+                        "D": "Airport border control"
+                    },
+                    "answer": "B",
+                    "points": 2,
+                    "explanation": "Biometrics are non-secret and rely on trusted input channels (fingerprint isn't from a glass!), making them unsuitable for remote Internet authentication where the input channel can't be trusted."
+                }
+            ]
+        },
+        
+        # SECTION 2: TRUE/FALSE (1 point each)
+        "section2": {
+            "title": "Section 2: True/False (1 point each)",
+            "questions": [
+                {
+                    "num": 21,
+                    "question": "Authentication and authorization are the same thing.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - Authentication verifies identity ('who are you?'), while authorization determines access rights ('what can you access?'). Authentication can be a step toward authorization."
+                },
+                {
+                    "num": 22,
+                    "question": "Two-stage authentication means user-to-device authentication followed by device-to-web authentication.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - Two-stage authentication refers to the process where a user first authenticates to their device, then the device authenticates to a web service."
+                },
+                {
+                    "num": 23,
+                    "question": "Storing passwords in cleartext is vulnerable to insider threats.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - Cleartext passwords expose all passwords if the file is stolen and are especially vulnerable to insider threats who have system access."
+                },
+                {
+                    "num": 24,
+                    "question": "In a trawling attack, the attacker targets a specific pre-identified user.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - Trawling (breadth-first) attacks aim to break into ANY account by trying many/all accounts. Targeted attacks aim at pre-identified users."
+                },
+                {
+                    "num": 25,
+                    "question": "If hi = hj in a dictionary attack, then wj is guaranteed to be the actual password pi.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - Hash collisions mean wj might not be the actual password pi, but wj will WORK as the password for login since H(wj) = H(pi) = hi."
+                },
+                {
+                    "num": 26,
+                    "question": "Password composition policies provide protection against password capture attacks.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - Password complexity policies do NOT protect against capture attacks (keyloggers, phishing, shoulder-surfing). They only help against simple guessing attacks."
+                },
+                {
+                    "num": 27,
+                    "question": "Rate limiting can lock out legitimate users as a side effect.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - Rate limiting (throttling) can cause denial of service to legitimate users as an unintended consequence of defending against online password-guessing attacks."
+                },
+                {
+                    "num": 28,
+                    "question": "Offline password-guessing attacks are limited by network bandwidth.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - Offline attacks (after stealing password file) are limited only by computational resources, not network bandwidth. Online attacks are limited by bandwidth."
+                },
+                {
+                    "num": 29,
+                    "question": "Password salting prevents targeted on-the-fly attacks when the salt is known.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - Salt doesn't increase time-cost of on-the-fly targeted attacks when salt si is available (from insider or stolen file). Salt primarily defends against pre-computed trawling attacks."
+                },
+                {
+                    "num": 30,
+                    "question": "Iterated hashing should ideally be combined with salting.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - Iterated hashing (password stretching) is ideally combined with salting for comprehensive defense against offline attacks."
+                },
+                {
+                    "num": 31,
+                    "question": "Password pepper (secret salt) slows down legitimate user verification.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - Pepper requires the system to sequentially try all R possible values during verification, slowing both legitimate verification and attacks by factor R."
+                },
+                {
+                    "num": 32,
+                    "question": "Attackers using password distributions try more popular passwords first.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - Attackers tailor guessing strategies by trying higher estimated probability (more popular) passwords first, exploiting the skewed distribution of user-chosen passwords."
+                },
+                {
+                    "num": 33,
+                    "question": "System-assigned random passwords are more usable than user-chosen passwords.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - System-assigned random passwords have poor usability (hard to remember), violating P11: User-buy-in, though they provide better security against guessing."
+                },
+                {
+                    "num": 34,
+                    "question": "Proactive password cracking involves the system trying to crack its own users' passwords.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - Proactive password cracking means the system attempts to crack its own users' passwords using background computing; users with cracked passwords are notified to change them."
+                },
+                {
+                    "num": 35,
+                    "question": "Passwords are easily delegated, which is both a benefit and a security drawback.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - Password delegation (to spouse/secretary) is an underrated benefit, but retraction of delegation is rarely done, creating a security drawback."
+                },
+                {
+                    "num": 36,
+                    "question": "Secret question answers should be treated as secrets like passwords.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - Secret questions often fail because answers are treated casually, but they should be protected as secrets since they provide account access."
+                },
+                {
+                    "num": 37,
+                    "question": "Passwords require no trust in a new third party compared to some other authentication methods.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - Passwords require no trust in third parties beyond client/server organizations. Public-key certificates, in contrast, require trusting external certificate authorities."
+                },
+                {
+                    "num": 38,
+                    "question": "Adding a MAC to password hashes makes stolen hash files useless for offline attacks.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - MAC on password hashes means attackers can't verify password guesses from a stolen hash file without the MAC secret key, rendering the file useless."
+                },
+                {
+                    "num": 39,
+                    "question": "Biometric authentication relies on characteristics being secret.",
+                    "answer": "F",
+                    "points": 1,
+                    "explanation": "FALSE - Biometrics are NON-secret. They rely on trusted input channels providing assurance the sample is 'tightly bound' to the user present (not from a glass of water!)."
+                },
+                {
+                    "num": 40,
+                    "question": "Biometric modalities include both physical and behavioral characteristics.",
+                    "answer": "T",
+                    "points": 1,
+                    "explanation": "TRUE - Biometric modalities include physical (fingerprints, facial recognition, iris, hand geometry, retinal scan) and behavioral (gait, typing rhythm, mouse patterns) characteristics."
+                }
+            ]
+        },
+        
+        # SECTION 3: SHORT ANSWER (2 points each)
+        "section3": {
+            "title": "Section 3: Short Answer (2 points each)",
+            "questions": [
+                {
+                    "num": 41,
+                    "question": "Name TWO of the four authentication categories (separate with comma):",
+                    "answer": ["what you know", "what you have", "where you are", "what you are", "what you do", "know", "have", "are", "do"],
+                    "points": 2,
+                    "type": "multi_text",
+                    "explanation": "The four authentication categories are: What you know, What you have, Where you are, and What you are/do (biometrics - physical or behavioral)."
+                },
+                {
+                    "num": 42,
+                    "question": "What does 2FA stand for?",
+                    "answer": ["two-factor authentication", "two factor authentication", "2fa", "two factor"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "2FA = Two-factor authentication, using two methods from different categories (both must succeed) to provide independent protection."
+                },
+                {
+                    "num": 43,
+                    "question": "When a system stores (username, H(password)), what must it do to verify a user-entered password p?",
+                    "answer": ["hash", "compute hash", "h(p)", "hash the entered password", "compute h(p) and compare"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "The system computes H(p) for the entered password and compares it with the stored hash value to verify if they match."
+                },
+                {
+                    "num": 44,
+                    "question": "Name ONE type of password capture attack:",
+                    "answer": ["shoulder-surfing", "keylogger", "phishing", "pharming", "social engineering", "middle-person", "proxy attack", "malware", "sticky note"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "Password capture attacks include: shoulder-surfing, hardware/software keyloggers, client malware, proxy/middle-person attacks, phishing, social engineering, pharming, observing written passwords."
+                },
+                {
+                    "num": 45,
+                    "question": "In password salting, is the salt value si stored in cleartext or encrypted?",
+                    "answer": ["cleartext", "clear text", "clear", "plaintext", "plain text", "unencrypted"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "Salt si is stored in cleartext to enable verification. The system stores (ui, si, H(pi,si)) with si readable to allow computing H(p,si) for verification."
+                },
+                {
+                    "num": 46,
+                    "question": "What is the main practical limitation of one-time pads that makes them similar to password management problems?",
+                    "answer": ["key distribution", "key length", "distribution", "key management", "length", "key size"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "One-time pads require keys as long as the message and secure key distribution, creating management problems similar to passwords (need to securely share/store the long key)."
+                },
+                {
+                    "num": 47,
+                    "question": "For an n-character password from alphabet of size b, how many possible passwords exist (password space size)?",
+                    "answer": ["b^n", "bn", "b**n", "b to the n", "b raised to n"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "Password space = b^n where b is alphabet size and n is password length. Expected brute-force success after b^(n-1) guesses."
+                },
+                {
+                    "num": 48,
+                    "question": "What does SSO stand for in authentication?",
+                    "answer": ["single sign-on", "single sign on", "sso"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "SSO = Single sign-on, architecture allowing users to authenticate once and access multiple services without re-authenticating separately for each."
+                },
+                {
+                    "num": 49,
+                    "question": "In SSO systems, what are the third parties called that create authenticators from initial authentication? (Abbreviation acceptable)",
+                    "answer": ["identity provider", "idp", "identity providers", "idps"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "Identity Providers (IdPs) are the third parties that access credentials or create authenticators (data tokens) from initial authentication for later identity representations."
+                },
+                {
+                    "num": 50,
+                    "question": "Why are biometrics considered non-secret?",
+                    "answer": ["publicly observable", "visible", "can be observed", "not secret", "non secret", "observable", "left behind"],
+                    "points": 2,
+                    "type": "text",
+                    "explanation": "Biometrics are non-secret because they can be publicly observed or obtained (fingerprints on glasses, face in photos). They rely on trusted input channels, not secrecy."
+                }
+            ]
+        }
+    }
+
+def merge_questions(chapter1_q, chapter2_q, chapter3_q):
+    """Merge questions from both chapters"""
+    merged = {}
+    all_sections = set(list(chapter1_q.keys()) + list(chapter2_q.keys()) + list(chapter3_q.keys()))
+    
+    for section in all_sections:
+        merged[section] = {
+            "title": chapter1_q.get(section, chapter2_q.get(section))["title"],
+            "questions": []
+        }
+        
+        if section in chapter1_q:
+            merged[section]["questions"].extend(chapter1_q[section]["questions"])
+        if section in chapter2_q:
+            # Renumber chapter 2 questions
+            offset = len(merged[section]["questions"])
+            for q in chapter2_q[section]["questions"]:
+                q_copy = q.copy()
+                q_copy["num"] = q["num"] + offset
+                merged[section]["questions"].append(q_copy)
+    
+    return merged
+
+def select_chapter():
+    """Let user select which chapter(s) to be quizzed on"""
+    clear_screen()
+    print("=" * 80)
+    print("SYSC 4810: Quiz Chapter Selection")
+    print("=" * 80)
+    print("\nWhich chapter(s) would you like to be quizzed on?")
+    print("  0) All Chapters (1, 2 & 3)")
+    print("  1) Chapter 1 only")
+    print("  2) Chapter 2 only")
+    print("  3) Chapter 3 only")
+    print("=" * 80)
+    
+    while True:
+        choice = input("\nEnter your choice (1, 2, 3, 0): ").strip()
+        if choice in ['0', '1', '2', '3']:
+            return choice
+        print("Invalid choice. Please enter 1, 2, or 3.")
+
+def run_quiz():
+    # Chapter selection
+    chapter_selection = select_chapter()
+    
+    clear_screen()
+    display_header(chapter_selection)
+    
+    input("Press ENTER to begin the quiz...")
+    start_time = time.time()
+    time_limit = 30 * 60  # 30 minutes in seconds
+    
+    # Get questions based on selection
+    if chapter_selection == "1":
+        questions = get_chapter_1_questions()
+    elif chapter_selection == "2":
+        questions = get_chapter_2_questions()
+    elif chapter_selection == "3":
+        questions = get_chapter_3_questions()
+    else:
+        chapter1_q = get_chapter_1_questions()
+        chapter2_q = get_chapter_2_questions()
+        chapter3_q = get_chapter_3_questions()
+        questions = merge_questions(chapter1_q, chapter2_q, chapter3_q)
+    
+    # Store user answers
+    user_answers = {}
+    score = 0
+    total_points = sum(q["points"] for section in questions.values() 
+                       for q in section["questions"])
     
     # Run through each section
     for section_key, section_data in questions.items():
@@ -756,15 +1831,18 @@ def run_quiz():
     print("\n" + "=" * 80)
     
     # Show summary
+    total_questions = sum(len(section["questions"]) for section in questions.values())
     print(f"\n📊 QUIZ SUMMARY")
-    print(f"Total Questions: 50")
+    print(f"Total Questions: {total_questions}")
     print(f"Points Earned: {score}/{total_points}")
     print(f"Time Used: {mins}m {secs}s of 30m")
     print("\n" + "=" * 80)
 
+
+
 if __name__ == "__main__":
     print("\n" + "=" * 80)
-    print("Welcome to SYSC 4810 Chapter 1 Quiz")
+    print("Welcome to SYSC 4810 Quiz System")
     print("=" * 80)
     print("\nIMPORTANT:")
     print("- You have 30 minutes to complete this quiz")
@@ -779,4 +1857,3 @@ if __name__ == "__main__":
         run_quiz()
     else:
         print("\nQuiz cancelled. Come back when you're ready!")
-                    
