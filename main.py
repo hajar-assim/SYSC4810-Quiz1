@@ -8,6 +8,9 @@ from chapter3_questions import get_chapter_3_questions
 from chapter4_questions import get_chapter_4_questions
 from chapter5_questions import get_chapter_5_questions
 from chapter6_questions import get_chapter_6_questions
+from chapter7_questions import get_chapter_7_questions
+from chapter8_questions import get_chapter_8_questions
+from chapter9_questions import get_chapter_9_questions
 
 # ============================================================================
 # CHAPTER CONFIGURATION
@@ -47,6 +50,21 @@ CHAPTERS = {
         'number': 6,
         'title': 'Chapter 6',
         'function': get_chapter_6_questions
+    },
+    7: {
+        'number': 7,
+        'title': 'Chapter 7',
+        'function': get_chapter_7_questions
+    },
+    8: {
+        'number': 8,
+        'title': 'Chapter 8',
+        'function': get_chapter_8_questions
+    },
+    9: {
+        'number': 9,
+        'title': 'Chapter 9',
+        'function': get_chapter_9_questions
     }
 }
 
