@@ -1,22 +1,60 @@
 import time
 import os
 
+# Import chapter question modules
+from chapter1_questions import get_chapter_1_questions
+from chapter2_questions import get_chapter_2_questions
+from chapter3_questions import get_chapter_3_questions
+from chapter4_questions import get_chapter_4_questions
+
+# ============================================================================
+# CHAPTER CONFIGURATION
+# ============================================================================
+# To add a new chapter:
+# 1. Create a new chapterX_questions.py file with get_chapter_X_questions() function
+# 2. Import it above
+# 3. Add an entry to the CHAPTERS dictionary below
+# ============================================================================
+CHAPTERS = {
+    1: {
+        'number': 1,
+        'title': 'Chapter 1',
+        'function': get_chapter_1_questions
+    },
+    2: {
+        'number': 2,
+        'title': 'Chapter 2',
+        'function': get_chapter_2_questions
+    },
+    3: {
+        'number': 3,
+        'title': 'Chapter 3',
+        'function': get_chapter_3_questions
+    },
+    4: {
+        'number': 4,
+        'title': 'Chapter 4',
+        'function': get_chapter_4_questions
+    }
+}
+
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def display_header(chapter_selection):
     print("=" * 80)
     print("SYSC 4810: Introduction to Network and Software Security")
-    if chapter_selection == "1":
-        print("Chapter 1 Quiz - Fall 2024")
-    elif chapter_selection == "2":
-        print("Chapter 2 Quiz - Fall 2024")
-    elif chapter_selection == "3":
-        print("Chapter 3 Quiz - Fall 2024")
-    elif chapter_selection == "4":
-        print("Chapter 4 Quiz - Fall 2024")
+
+    if chapter_selection == "0":
+        # All chapters
+        chapter_titles = " & ".join([str(ch) for ch in sorted(CHAPTERS.keys())])
+        print(f"Chapters {chapter_titles} Combined Quiz - Fall 2024")
     else:
-        print("Chapters 1 & 2 & 3 & 4 Combined Quiz - Fall 2024")
+        # Single chapter
+        chapter_num = int(chapter_selection)
+        if chapter_num in CHAPTERS:
+            print(f"{CHAPTERS[chapter_num]['title']} Quiz - Fall 2024")
+
     print("=" * 80)
     print("Time Limit: 75 Minutes")
     print("Total Points: 100")
@@ -2086,6 +2124,7 @@ def get_chapter_4_questions():
                 },
                 {
                     "num": 50,
+                    
                     "question": "What property must the exchange lack to prevent offline password guessing in PAKE protocols?",
                     "answer": ["verifiable text", "verifiable", "verification", "verifiability"],
                     "points": 2,
@@ -2096,57 +2135,53 @@ def get_chapter_4_questions():
         }
     }
 
-def merge_questions(chapter1_q, chapter2_q, chapter3_q, chapter4_q):
-    """Merge questions from all three chapters"""
+# ============================================================================
+# Initialize chapter functions in CHAPTERS configuration
+# ============================================================================
+CHAPTERS[1]['function'] = get_chapter_1_questions
+CHAPTERS[2]['function'] = get_chapter_2_questions
+CHAPTERS[3]['function'] = get_chapter_3_questions
+CHAPTERS[4]['function'] = get_chapter_4_questions
+
+def merge_questions(*chapter_question_dicts):
+    """Merge questions from multiple chapters dynamically
+
+    Args:
+        *chapter_question_dicts: Variable number of chapter question dictionaries
+
+    Returns:
+        Merged dictionary with all questions from all chapters
+    """
     merged = {}
-    all_sections = set(list(chapter1_q.keys()) + list(chapter2_q.keys()) + list(chapter3_q.keys()) + list(chapter4_q.keys()))
-    
+
+    # Collect all unique section keys from all chapters
+    all_sections = set()
+    for chapter_q in chapter_question_dicts:
+        all_sections.update(chapter_q.keys())
+
+    # Process each section
     for section in all_sections:
-        # Get title from first available chapter
+        # Get title from first chapter that has this section
         title = None
-        if section in chapter1_q:
-            title = chapter1_q[section]["title"]
-        elif section in chapter2_q:
-            title = chapter2_q[section]["title"]
-        elif section in chapter3_q:
-            title = chapter3_q[section]["title"]
-        elif section in chapter4_q:
-            title = chapter4_q[section]["title"]
-        
+        for chapter_q in chapter_question_dicts:
+            if section in chapter_q:
+                title = chapter_q[section]["title"]
+                break
+
         merged[section] = {
             "title": title,
             "questions": []
         }
-        
-        # Add chapter 1 questions
-        if section in chapter1_q:
-            merged[section]["questions"].extend(chapter1_q[section]["questions"])
-        
-        # Add chapter 2 questions with offset
-        if section in chapter2_q:
-            offset = len(merged[section]["questions"])
-            for q in chapter2_q[section]["questions"]:
-                q_copy = q.copy()
-                q_copy["num"] = q["num"] + offset
-                merged[section]["questions"].append(q_copy)
-        
-        # Add chapter 3 questions with offset
-        if section in chapter3_q:
-            offset = len(merged[section]["questions"])
-            for q in chapter3_q[section]["questions"]:
-                q_copy = q.copy()
-                q_copy["num"] = q["num"] + offset
 
-                merged[section]["questions"].append(q_copy)
-        # Add chapter 4 questions with offset
-        if section in chapter4_q:
-            offset = len(merged[section]["questions"])
-            for q in chapter4_q[section]["questions"]:
-                q_copy = q.copy()
-                q_copy["num"] = q["num"] + offset
-                merged[section]["questions"].append(q_copy)
-    
-    
+        # Add questions from each chapter with appropriate numbering offset
+        for chapter_q in chapter_question_dicts:
+            if section in chapter_q:
+                offset = len(merged[section]["questions"])
+                for q in chapter_q[section]["questions"]:
+                    q_copy = q.copy()
+                    q_copy["num"] = q["num"] + offset
+                    merged[section]["questions"].append(q_copy)
+
     return merged
 
 def select_chapter():
@@ -2156,45 +2191,52 @@ def select_chapter():
     print("SYSC 4810: Quiz Chapter Selection")
     print("=" * 80)
     print("\nWhich chapter(s) would you like to be quizzed on?")
-    print("  0) All Chapters (1, 2 & 3)")
-    print("  1) Chapter 1 only")
-    print("  2) Chapter 2 only")
-    print("  3) Chapter 3 only")
-    print("  4) Chapter 4 only")
+
+    # Dynamically generate menu from CHAPTERS configuration
+    chapter_nums = sorted(CHAPTERS.keys())
+    all_chapters_str = ", ".join(str(ch) for ch in chapter_nums[:-1]) + f" & {chapter_nums[-1]}"
+    print(f"  0) All Chapters ({all_chapters_str})")
+
+    for chapter_num in chapter_nums:
+        print(f"  {chapter_num}) {CHAPTERS[chapter_num]['title']} only")
+
     print("=" * 80)
-    
+
+    # Generate valid choices
+    valid_choices = ['0'] + [str(ch) for ch in chapter_nums]
+    choices_display = ", ".join(valid_choices)
+
     while True:
-        choice = input("\nEnter your choice (1, 2, 3, 0): ").strip()
-        if choice in ['0', '1', '2', '3', '4']:
+        choice = input(f"\nEnter your choice ({choices_display}): ").strip()
+        if choice in valid_choices:
             return choice
-        print("Invalid choice. Please enter 1, 2, 3, or 4.")
+        print(f"Invalid choice. Please enter {choices_display}.")
 
 def run_quiz():
     # Chapter selection
     chapter_selection = select_chapter()
-    
+
     clear_screen()
     display_header(chapter_selection)
-    
+
     input("Press ENTER to begin the quiz...")
     start_time = time.time()
     time_limit = 75 * 60  #75 minutes in seconds
-    
-    # Get questions based on selection
-    if chapter_selection == "1":
-        questions = get_chapter_1_questions()
-    elif chapter_selection == "2":
-        questions = get_chapter_2_questions()
-    elif chapter_selection == "3":
-        questions = get_chapter_3_questions()
-    elif chapter_selection == "4":
-        questions = get_chapter_4_questions()
+
+    # Get questions based on selection - dynamically using CHAPTERS configuration
+    if chapter_selection == "0":
+        # All chapters - get all chapter questions and merge them
+        all_chapter_questions = []
+        for chapter_num in sorted(CHAPTERS.keys()):
+            chapter_func = CHAPTERS[chapter_num]['function']
+            if chapter_func:
+                all_chapter_questions.append(chapter_func())
+        questions = merge_questions(*all_chapter_questions)
     else:
-        chapter1_q = get_chapter_1_questions()
-        chapter2_q = get_chapter_2_questions()
-        chapter3_q = get_chapter_3_questions()
-        chapter4_q = get_chapter_4_questions()
-        questions = merge_questions(chapter1_q, chapter2_q, chapter3_q, chapter4_q)
+        # Single chapter
+        chapter_num = int(chapter_selection)
+        if chapter_num in CHAPTERS and CHAPTERS[chapter_num]['function']:
+            questions = CHAPTERS[chapter_num]['function']()
     
     # Store user answers
     user_answers = {}
